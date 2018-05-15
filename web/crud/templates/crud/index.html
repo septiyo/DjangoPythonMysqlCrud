@@ -1,0 +1,76 @@
+{% extends 'crud/base.html' %}
+{% block body %}
+<form class="form-inline"  action="create" method="POST">{% csrf_token %}
+    <div class="form-group">
+        <label for="firstname">Firstname</label>
+        <input type="text" name="firstname" value="{{ members.firstname }}" required="required"/>
+    </div>
+    <div class="form-group">
+        <label for="lastname">Lastname</label>
+        <input type="text" name="lastname" value="{{ members.lastname }}" required="required"/>
+    </div>
+<br>
+    <div class="form-group">
+        <label for="agama">Agama</label><br>
+
+        <input type="radio" name="agama" value="ISLAM" checked> ISLAM<br>
+        <input type="radio" name="agama" value="KRISTEN"> KRISTEN<br>
+        <input type="radio" name="agama" value="BUDHA"> BUDHA
+        <!--input type="text" name="agama" value="{{ members.agama }}" required="required"/-->
+    </div><br>
+    <div class="form-group">
+        <label for="alamat">Alamat</label>
+         <textarea class="form-control" name="alamat" rows="5">{{ members.alamat }}</textarea>
+        <!--input type="text" name="alamat" value="{{ members.agama }}" required="required"/-->
+        <button type="submit" class="btn btn-sm btn-primary"><span class="glyphicon glyphicon-plus"></span> ADD</button>
+    </div>
+
+</form>
+<br />
+<table class="table table-bordered">
+    <thead class="alert-warning">
+        <tr>
+            <th>Firstname</th>
+            <th>Lastname</th>
+            <th>Agama</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for member in members %}
+        <tr>
+            <td>{{ member.firstname }}</td>
+            <td>{{ member.lastname }}</td>
+            <td>{{ member.agama }}</td>
+            <td><center><a class="btn btn-sm btn-warning" href="edit/{{ member.id }}"><span class="glyphicon glyphicon-edit"></span> Edit</a>
+                        <a class="btn btn-sm btn-danger" href="delete/{{ member.id }}"><span class="glyphicon glyphicon-trash"></span> Delete</a></center>
+                      </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if members.has_other_pages %}
+  <ul class="pagination">
+    {% if members.has_previous %}
+      <li><a href="?page={{ members.previous_page_number }}">&laquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&laquo;</span></li>
+    {% endif %}
+    {% for i in members.paginator.page_range %}
+      {% if members.number == i %}
+        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+      {% else %}
+        <li><a href="?page={{ i }}">{{ i }}</a></li>
+      {% endif %}
+    {% endfor %}
+    {% if members.has_next %}
+      <li><a href="?page={{ members.next_page_number }}">&raquo;</a></li>
+    {% else %}
+      <li class="disabled"><span>&raquo;</span></li>
+    {% endif %}
+  </ul>
+{% endif %}
+
+
+{% endblock %}
